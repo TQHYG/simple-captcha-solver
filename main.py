@@ -78,11 +78,9 @@ def main():
     
     if error_log == 0:
         print(f"The captcha text is: {captcha_text}" if lang == 'en' else f"验证码文本为：{captcha_text}")
-    elif captcha_text == 'NaN':
-        print(f"Error occurred during solving captcha: {error_log}" if lang == 'en' else f"解码时发生错误：{error_log}")
     else:
-        print("Unknown return value from solve_captcha function." if lang == 'en' else "未知的返回值。")
-    
+        print(f"Error occurred during solving captcha: {error_log}" if lang == 'en' else f"解码时发生错误：{error_log}")
+
     # 清空缓存目录
     clear_cache(cache_dir)
 

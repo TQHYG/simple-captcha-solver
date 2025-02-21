@@ -100,11 +100,11 @@ def resolve_single(file_url):
             print(f"Failed to copy file: {str(e)}" if lang == 'en' else f"复制文件失败: {str(e)}")
             return()
 
-        captcha_text, error_log = solve_captcha(local_filename)
-        if error_log == 0:
-            print(f"The captcha text is: {captcha_text}" if lang == 'en' else f"验证码文本为：{captcha_text}")
-        else:
-            print(f"Error occurred during solving captcha: {error_log}" if lang == 'en' else f"解码时发生错误：{error_log}")
+    captcha_text, error_log = solve_captcha(local_filename)
+    if error_log == 0:
+        print(f"The captcha text is: {captcha_text}" if lang == 'en' else f"验证码文本为：{captcha_text}")
+    else:
+        print(f"Error occurred during solving captcha: {error_log}" if lang == 'en' else f"解码时发生错误：{error_log}")
 
 def batch_process_directory(directory):
     """批量处理目录中的文件"""

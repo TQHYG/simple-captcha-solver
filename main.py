@@ -8,7 +8,7 @@ def on_single_file():
     if user_input:
         parsed_url = cli.urlparse(user_input)
         if cli.os.path.isfile(user_input) or (parsed_url.scheme and parsed_url.netloc):
-            cli.resolve_single_with_input(user_input)
+            cli.resolve_single(user_input)
 
 def on_batch_directory():
     """批量处理目录"""

@@ -1,16 +1,16 @@
 # Simple Captcha Solver
 
-**[简体中文](README.md) | English**
+**English | [简体中文](README.md)**
 
-A simple and easy-to-use Python tool for recognizing graphical captchas. It supports loading images from URLs or local paths and uses `ddddocr` for recognition.
+A simple and easy-to-use Python tool for recognizing captcha images. It supports loading images from a URL or local path and uses `ddddocr` for recognition.
 
 ## Features
-1. **Multi-language Support**: Automatically switches between Chinese and English interfaces based on the system language.
-2. **Image Download**: Supports downloading captcha images from URLs.
-3. **Local File Support**: Supports loading images directly from local paths.
-4. **Multiple File Format Support**: Supports various image formats.
-5. **Cache Cleanup**: Automatically cleans up cached files to avoid excessive disk space usage.
-6. **Error Handling**: Handles common errors and provides friendly error messages.
+
+- Supports single captcha recognition (from a local file or network URL)
+- Supports batch processing of all image files in a directory
+- Supports batch captcha recognition based on a list of URLs in a text file
+- Automatically detects system language settings and adjusts output language (Chinese or English)
+- Provides command-line argument support for direct execution of specific tasks
 
 ## Installation
 1. Clone the repository:
@@ -21,53 +21,44 @@ A simple and easy-to-use Python tool for recognizing graphical captchas. It supp
    ```bash
    pip install -r requirements.txt
    ```
-   If the `requirements.txt` file is not available, you can manually install the dependencies:
+   If there is no `requirements.txt` file, you can manually install the dependencies:
    ```bash
    pip install ddddocr requests
    ```
 
 ## Usage
-### 1. Calling via Command Line Arguments
-Run the following command:
-```bash
-python main.py -f <image_url_or_path>
-```
+### 1. Invoke with Command-Line Arguments
 
-#### Examples
-- **Recognize Captcha from URL**:
-  ```bash
-  python main.py -f https://example.com/captcha.jpg
-  ```
-- **Recognize Captcha from Local Path**:
-  ```bash
-  python main.py -f ./captcha.jpg
-  ```
+When running the script, you can specify the following arguments:
+
+- `-f <url_or_path>`: Recognize a captcha from the provided URL or file path.
+- `-d <directory>`: Batch recognize all files in the specified directory.
+- `-i <url_file>`: Batch recognize captchas from URLs listed in the provided text file.
+
+Examples:
+
+```bash
+python captcha_tool.py -f "http://example.com/captcha.jpg"
+python captcha_tool.py -d "/path/to/directory"
+python captcha_tool.py -i "/path/to/urls.txt"
+```
 
 ### 2. Interactive Input
-If the `-f` parameter is not provided, the program will prompt for the image URL or path:
-```bash
-python main.py
-```
 
-#### Example
-```bash
-Please enter the image URL or path: https://example.com/captcha.jpg
-```
+If no command-line arguments are specified, the program will display an interactive menu where you can select the corresponding function by entering a number:
 
-### 3. Output Results
-- **Recognition Success**:
-  ```
-  Captcha text: 1234
-  ```
-- **Recognition Failure**:
-  ```
-  Error occurred during solving captcha: Unable to recognize captcha
-  ```
+1. Recognize a single file or URL
+2. Batch recognize all files in a directory
+3. Batch recognize online URLs
+4. Exit the program
+
+Follow the prompts to enter relevant information to start the recognition process.
+
 
 ## Code Structure
 ```plaintext
 simple-captcha-solver/
-├── main.py                # Main program entry
+├── main.py                # Main program entry point
 ├── captcha_solver.py/     # Captcha recognition module
 ├── requirements.txt       # Dependency file
 ├── test_image/            # Test images
@@ -79,45 +70,18 @@ simple-captcha-solver/
 └── LICENSE                # Open source license
 ```
 
-## Parameter Description
-| Parameter | Description |
-|-----------|-------------|
-| `-f`      | Specify the URL or local path of the captcha image |
-| `-h`      | Display help information and exit |
-
-## Example Runs
-### 1. Recognize Captcha from URL
-```bash
-$ python main.py -f https://example.com/captcha.jpg
-Captcha text: 1234
-```
-
-### 2. Recognize Captcha from Local Path
-```bash
-$ python main.py -f ./captcha.jpg
-Captcha text: 5678
-```
-
-### 3. Interactive Input
-```bash
-$ python main.py
-Please enter the image URL or path: https://example.com/captcha.jpg
-Image downloaded successfully.
-Captcha text: 1234
-```
 
 ## Notes
 1. **Dependencies**:
    - `ddddocr`: Used for captcha recognition.
    - `requests`: Used for downloading images from URLs.
 2. **Cache Cleanup**:
-   - The program caches downloaded images in the `pic_cache` directory and automatically cleans them up after execution.
+   - The program caches downloaded images in the `pic_cache` directory and automatically cleans up after execution.
 3. **Language Support**:
-   - The program automatically switches to Chinese or English based on the system language.
+   - The program automatically switches between Chinese and English based on system language settings.
 
 ## Contribution Guide
-We welcome contributions of code or suggestions for improvements! If you encounter any issues or have new feature requests, please submit an [Issue](https://github.com/yourusername/simple-captcha-solver/issues).
+Contributions are welcome! If you find any issues or have suggestions for new features, please submit an [Issue](https://github.com/yourusername/simple-captcha-solver/issues).
 
 ## Open Source License
 This project is licensed under the [GPL-3.0 License](LICENSE).
-

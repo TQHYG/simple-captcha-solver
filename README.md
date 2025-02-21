@@ -1,6 +1,6 @@
 # Simple Captcha Solver
 
-**简体中文 | [English](ReadMe_en.md)**
+**简体中文 | [English](README_en.md)**
 
 一个简单易用的 Python 工具，用于识别图形验证码。支持从 URL 或本地路径加载图片，并通过 `ddddocr` 进行识别。
 

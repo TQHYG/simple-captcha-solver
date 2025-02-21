@@ -41,10 +41,21 @@ def preprocess_user_input(user_input):
 
 def download_image(url, filename):
     """从给定的URL下载图片"""
-    response = requests.get(url, stream=True)
-    with open(filename, 'wb') as out_file:
-        shutil.copyfileobj(response.raw, out_file)
-    del response
+    try:
+        response = requests.get(url, stream=True)
+        # 检查状态码是否表示请求成功
+        if response.status_code == 200:
+            # 使用上下文管理器确保文件正确写入并关闭
+            with open(filename, 'wb') as out_file:
+                shutil.copyfileobj(response.raw, out_file)
+        else:
+            print(f"Failed to download image: HTTP {response.status_code}")
+    except requests.RequestException as e:
+        # 处理所有类型的请求异常
+        print(f"Failed to download image: {str(e)}")
+    finally:
+        # 确保即使发生错误也释放响应对象
+        response.close()
 
 def copy_file(src, dst):
     """复制文件到目标位置，如果目标文件存在则覆盖"""
@@ -68,29 +79,26 @@ def show_menu():
     menu_text = "请选择要执行的操作：\n1. 识别单个文件或URL\n2. 批量识别目录中的所有文件\n3. 批量识别在线URL\n4. 退出程序" if lang == 'zh' else "Please choose an operation:\n1. Identify a single file or URL\n2. Batch recognize all files in a directory\n3. Batch recognize online URLs\n4. Exit the program"
     print(menu_text)
 
-def resolve_single():
+def resolve_single(file_url):
     global cache_dir
     global lang
-    input_text = "Please input the URL or Picture file: " if lang == 'en' else "请输入要识别的图片路径或URL："
-    user_input = input(input_text)
-    user_input = preprocess_user_input(user_input)
-    parsed_url = urlparse(user_input)
+    parsed_url = urlparse(file_url)
     ext = os.path.splitext(parsed_url.path)[1] if len(os.path.splitext(parsed_url.path)[1]) > 0 else '.jpg'
     local_filename = os.path.join(cache_dir, f"captcha{ext}")
     if parsed_url.scheme and parsed_url.netloc:
         try:
-            download_image(user_input, local_filename)
+            download_image(file_url, local_filename)
             print("Image downloaded successfully." if lang == 'en' else "图片下载成功。")
         except Exception as e:
             print(f"Failed to download image: {str(e)}" if lang == 'en' else f"下载图片失败: {str(e)}")
-            sys.exit(1)
+            return()
     else:
         try:
-            copy_file(user_input, local_filename)
+            copy_file(file_url, local_filename)
             print("File copied successfully." if lang == 'en' else "文件复制成功。")
         except Exception as e:
             print(f"Failed to copy file: {str(e)}" if lang == 'en' else f"复制文件失败: {str(e)}")
-            sys.exit(1)
+            return()
 
         captcha_text, error_log = solve_captcha(local_filename)
         if error_log == 0:
@@ -218,7 +226,10 @@ def main():
             show_menu()
             choice = input(">").strip()
             if choice == '1':
-                resolve_single()
+                input_text = "Please input the URL or Picture file: " if lang == 'en' else "请输入要识别的图片路径或URL："
+                user_input = input(input_text)
+                file_url = preprocess_user_input(user_input)
+                resolve_single(file_url)
             elif choice == '2':
                 input_text = "Please input the directory: " if lang == 'en' else "请输入要批量识别的路径："
                 user_input = input(input_text)
